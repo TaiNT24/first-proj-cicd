@@ -20,6 +20,7 @@ jobs:
           command: | 
             echo world
             echo env value of CIRCLE_USERNAME: $CIRCLE_USERNAME
+            echo env value of ENV_CIRCLE_NAME: $ENV_CIRCLE_NAME
 workflows:
   # Name the workflow "welcome"
   welcome:
