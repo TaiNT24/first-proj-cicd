@@ -11,19 +11,25 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - run:
-          command: echo Hello
-  print_world:
+          command: echo "text to output here" > output.txt
+      - persist_to_workspace:
+          root: /tmp/dir
+          paths:
+            - my_folder
+  print_output_file:
     docker: 
       - image: circleci/node:13.8.0
     steps:
+      - attach_workspace:
+          at: /tmp/dir/my_folder
       - run:
-          command: echo world
+          command: cat output.txt
 workflows:
   # Name the workflow "welcome"
   welcome:
     # Run the welcome/run job in its own container
     jobs:
       - print_hello
-      - print_world:
+      - print_output_file:
           requires:
             - print_hello
