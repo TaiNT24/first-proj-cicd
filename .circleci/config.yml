@@ -13,7 +13,7 @@ jobs:
       - run:
           command: |
             echo "text to output here" > output.txt
-            mkdir /tmp/dir
+            mkdir /tmp/dir/my_folder
       - persist_to_workspace:
           root: /tmp/dir
           paths:
