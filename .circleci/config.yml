@@ -12,20 +12,20 @@ jobs:
     steps:
       - run:
           command: |
-            echo "text to output here" > output.txt
-            mkdir /tmp/dir/my_folder
+            mkdir /tmp/dir
+            echo "text to output here" > /tmp/dir/output.txt
       - persist_to_workspace:
           root: /tmp/dir
           paths:
-            - my_folder
+            - output.txt
   print_output_file:
     docker: 
       - image: circleci/node:13.8.0
     steps:
       - attach_workspace:
-          at: /tmp/dir/my_folder
+          at: /tmp/dir
       - run:
-          command: cat output.txt
+          command: cat /tmp/dir/output.txt
 workflows:
   # Name the workflow "welcome"
   welcome:
