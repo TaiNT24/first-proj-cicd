@@ -36,9 +36,9 @@ jobs:
       - attach_workspace:
           at: /tmp/dir
       - run:
-          command: cat /tmp/dir/output.txt
+          command: cat /tmp/dir/output.txt1
       - run:
-          return 1
+          command: echo "cat file is fail ne"
           when: on_fail
 workflows:
   # Name the workflow "welcome"
