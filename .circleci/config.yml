@@ -36,7 +36,9 @@ jobs:
       - attach_workspace:
           at: /tmp/dir
       - run:
-          command: cat /tmp/dir/output.txt1
+          command: |
+            cat /tmp/dir/output.txt
+            return 1
       - run:
           command: echo "cat file is fail ne"
           when: on_fail
