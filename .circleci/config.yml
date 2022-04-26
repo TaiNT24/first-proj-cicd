@@ -37,6 +37,9 @@ jobs:
           at: /tmp/dir
       - run:
           command: cat /tmp/dir/output.txt
+      - run:
+          command: return 1
+          when: on_fail
 workflows:
   # Name the workflow "welcome"
   welcome:
