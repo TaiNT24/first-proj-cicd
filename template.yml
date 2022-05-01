@@ -17,7 +17,7 @@ Resources:
         - AssociatePublicIpAddress: true
           DeviceIndex: "0"
           GroupSet: 
-            - sg-05262d4b187bdbeca
+          - !Ref InstanceSecurityGroup
           # SubnetId: 
           #   Ref: "PublicSubnet"
   InstanceSecurityGroup:
