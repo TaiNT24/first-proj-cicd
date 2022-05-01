@@ -50,6 +50,21 @@ jobs:
             # Install Ansible
             apk add --update ansible
       - run:
+          name: install aws
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            apt install unzip
+            unzip awscliv2.zip
+            sudo ./aws/install
+      - run:
+          name: add public ip of EC2 into inventory file
+          command: |
+            touch inventory
+            echo [all] > inventory
+            aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --output text >> inventory
+      - run:
           name: Run Playbook and Configure server
           command: |
             # Your command
