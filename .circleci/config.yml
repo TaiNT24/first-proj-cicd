@@ -26,6 +26,14 @@ jobs:
               --template-file template.yml \
               --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} \
               --region us-east-1
+      - run:
+          name: add public ip of EC2 into inventory file
+          command: |
+            touch inventory
+            echo [all] > inventory
+            aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --output text >> inventory
 
   # Exercise: Config and Deployment
   configure_infrastructure: 
@@ -41,14 +49,6 @@ jobs:
           command: |
             # Install Ansible
             apk add --update ansible
-      - run:
-          name: add public ip of EC2 into inventory file
-          command: |
-            touch inventory
-            echo [all] > inventory
-            aws ec2 describe-instances \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --output text >> inventory
       - run:
           name: Run Playbook and Configure server
           command: |
