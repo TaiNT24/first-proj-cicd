@@ -16,6 +16,10 @@ Resources:
       NetworkInterfaces: 
         - AssociatePublicIpAddress: true
           DeviceIndex: "0"
+          GroupSet: 
+            - sg-05262d4b187bdbeca
+          # SubnetId: 
+          #   Ref: "PublicSubnet"
   InstanceSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
