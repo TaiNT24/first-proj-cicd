@@ -8,7 +8,6 @@ orbs:
 commands:
    # Exercise - Rollback
    destroy_environment:
-    executor: aws-cli/default
     steps:
       - run:
           name: Destroy environment
@@ -48,6 +47,7 @@ jobs:
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text >> inventory
+      - destroy_environment
 
   # Exercise: Config and Deployment
   configure_infrastructure: 
@@ -70,11 +70,13 @@ jobs:
             # Your command
             ansible-playbook -i inventory main-remote.yml
 
+      - destroy_environment
+
   smoke_test:
     docker:
-      - image: alpine:latest
+      - image: amazon/aws-cli  # alpine:latest
     steps:
-      - run: apk add --update curl
+      # - run: apk add --update curl
       - run:
           name: smoke test
           command: |
