@@ -7,7 +7,7 @@ orbs:
 
 commands:
    # Exercise - Rollback
-   destroy_environment:
+  destroy_environment:
     steps:
       - run:
           name: Destroy environment
@@ -16,6 +16,16 @@ commands:
           when: on_fail
           command: |
             aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5}
+
+  install_aws_cli:
+    steps:
+      - run:
+          name: install aws cli
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            sudo apt install unzip
+            unzip awscliv2.zip
+            sudo ./aws/install
 
 # Define the jobs we want to run for this project
 jobs:
