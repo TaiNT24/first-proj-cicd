@@ -69,8 +69,9 @@ jobs:
             ansible-playbook -i inventory main-remote.yml
 
   smoke_test:
-    docker:
-      - image: alpine:latest
+    # docker:
+    #   - image: alpine:latest
+    executor: aws-cli/default
     steps:
       - run: apk add --update curl
       - run:
@@ -92,6 +93,8 @@ workflows:
   myWorkflow:
     jobs:
       # - myjob1
-      # - create_infrastructure
+      - create_infrastructure
       # - configure_infrastructure
-      - smoke_test
+      - smoke_test:
+          requires:
+            - create_infrastructure
