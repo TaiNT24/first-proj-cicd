@@ -4,6 +4,19 @@ orbs:
   # Choose either one of the orbs below
   # welcome: circleci/welcome-orb@0.4.1
   aws-cli: circleci/aws-cli@2.0.3
+
+commands:
+   # Exercise - Rollback
+   destroy_environment:
+     steps:
+       - run:
+           name: Destroy environment
+           # ${CIRCLE_WORKFLOW_ID} is a Built-in environment variable 
+           # ${CIRCLE_WORKFLOW_ID:0:5} takes the first 5 chars of the variable CIRCLE_CI_WORKFLOW_ID 
+           when: on_fail
+           command: |
+             aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5}
+
 # Define the jobs we want to run for this project
 jobs:
   myjob1:  # Choose any name, such as `build`
@@ -50,32 +63,35 @@ jobs:
             # Install Ansible
             apk add --update ansible
       - run:
-          name: install aws
-          command: |
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            apt install unzip
-            unzip awscliv2.zip
-            sudo ./aws/install
-      - run:
-          name: add public ip of EC2 into inventory file
-          command: |
-            touch inventory
-            echo [all] > inventory
-            aws ec2 describe-instances \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --output text >> inventory
-      - run:
           name: Run Playbook and Configure server
           command: |
             # Your command
             ansible-playbook -i inventory main-remote.yml
+
+  smoke_test:
+    docker:
+      - image: alpine:latest
+    steps:
+      - run: apk add --update curl
+      - run:
+          name: smoke test
+          command: |
+            # URL="https://blog.udacity.com/"
+            # # Test if website exists
+            # if curl -s --head ${URL} 
+            # then
+            #   return 0
+            # else
+            #   return 1
+            # fi
+            return 1
+      - destroy_environment
 # Sequential workflow
 workflows:
   # Name the workflow
   myWorkflow:
     jobs:
-      - myjob1
-      - create_infrastructure
-      - configure_infrastructure:
-          requires:
-            - create_infrastructure
+      # - myjob1
+      # - create_infrastructure
+      # - configure_infrastructure
+      - smoke_test
