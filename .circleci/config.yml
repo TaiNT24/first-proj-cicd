@@ -52,6 +52,7 @@ jobs:
   configure_infrastructure: 
     docker:
       - image: python:3.7-alpine3.11
+      - image: amazon/aws-cli
     steps:
       - checkout
       - add_ssh_keys:
@@ -69,9 +70,9 @@ jobs:
             ansible-playbook -i inventory main-remote.yml
 
   smoke_test:
-    # docker:
-    #   - image: alpine:latest
-    executor: aws-cli/default
+    docker:
+      - image: alpine:latest
+      - image: amazon/aws-cli
     steps:
       - run: apk add --update curl
       - run:
