@@ -26,9 +26,8 @@ commands:
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             apk add --update unzip
             unzip awscliv2.zip
-            ./aws/install
-
-            echo aws --version
+            sudo ./aws/install
+            aws --version
 
 # Define the jobs we want to run for this project
 jobs:
